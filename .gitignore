@@ -1,0 +1,13 @@
+logs/
+npm-debug.log
+yarn-error.log
+node_modules/
+.idea/
+.history
+.DS_Store
+.rpt2_cache
+*.swp
+dist/
+examples/
+lib/
+dll
