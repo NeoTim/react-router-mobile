@@ -1,13 +1,12 @@
 import React from 'react'
-
-import Nav from './Nav'
+import { Back } from '../../dist'
 
 class PageInfo extends React.Component {
   render() {
     return (
       <div className="about">
-        <Nav />
         <h1>About</h1>
+          <Back />
       </div>
     )
   }

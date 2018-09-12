@@ -1,20 +1,22 @@
 import * as React from 'react'
 import { contextStruct } from './PropTypes'
 
+function getDisplayName(WrappedComponent) {
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component'
+}
+
 export default function connect(stores?: any[]) {
   return function wrapWithConnect(WrappedComponent): React.ReactNode {
     interface HocProps {
       [propName: string]: number
     }
 
-    interface HocState {
-      readonly store: object
-    }
-
-    return class extends React.Component<HocProps> {
+    return class Connect extends React.Component<HocProps> {
       static contextTypes = {
         store: contextStruct,
       }
+
+      static displayName = `Connect(${getDisplayName(WrappedComponent)})`
 
       state = {
         store: {},

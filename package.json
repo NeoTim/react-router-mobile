@@ -69,12 +69,12 @@
     "typescript": "^3.0.1"
   },
   "peerDependencies": {
+    "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-transition-group": "^2.4.0",
     "unstated": "^2.1.1",
-    "url-parse": "^1.4.3",
-    "prop-types": "^15.6.2"
+    "url-parse": "^1.4.3"
   },
   "dependencies": {
     "hoist-non-react-statics": "^3.0.1",

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Provider } from '../statmen'
+// import { Provider } from '../statmen'
 import Pages from './Pages'
 
 interface Props {
@@ -18,9 +18,9 @@ class Router extends React.Component<Props, State> {
 
   render() {
     return (
-      <Provider>
-        <Pages pages={this.props.children} />
-      </Provider>
+      // <Provider>
+      <Pages pages={this.props.children} />
+      // </Provider>
     )
   }
 }

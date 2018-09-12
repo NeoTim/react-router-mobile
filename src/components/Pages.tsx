@@ -38,13 +38,13 @@ class Pages extends React.Component<Prop> {
   }
 
   getPageByPath = (path: string) => {
-    const { pages } = this.props
-    return pages.find(page => page.props.path === path)
+    const { pageStore } = this.props
+    return pageStore.state.pages.find(page => page.path === path)
   }
 
   getDefaultPage = () => {
-    const { pages } = this.props
-    return pages.find(page => page.props.default)
+    const { pageStore } = this.props
+    return pageStore.state.pages.find(page => page.default)
   }
 
   componentWillMount() {
@@ -56,6 +56,7 @@ class Pages extends React.Component<Prop> {
     const { pages } = this.props
     const { pageStore } = this.props
     pageStore.init(pages)
+
     const defaultPage = this.getDefaultPage()
     pageStore.add(defaultPage)
   }
@@ -63,6 +64,7 @@ class Pages extends React.Component<Prop> {
   render() {
     const { pageStore } = this.props
     const { mountedPages } = pageStore.state
+    console.log('mountedPages:', mountedPages)
 
     return (
       <TransitionGroup class="pages">
@@ -70,9 +72,9 @@ class Pages extends React.Component<Prop> {
           <CSSTransition
             key={index}
             timeout={400}
-            classNames={page.props.animation}
+            classNames={page.component.props.animation}
           >
-            <div className="page">{page}</div>
+            <div className="page">{page.component}</div>
           </CSSTransition>
         ))}
       </TransitionGroup>

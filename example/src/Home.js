@@ -1,15 +1,24 @@
 import React from 'react'
 
-import Nav from './Nav'
-import { Link } from '../../dist'
+import { navigate } from '../../dist/index'
 
 class PageIndex extends React.Component {
+
+  go(path) {
+    return () => navigate(path)
+  }
   render() {
+    const { go } = this
     return (
       <div className="home">
-        <Nav />
         <h1>home</h1>
-        <Link />
+        <ol>
+          <li onClick={go('/')}>Home</li>
+          <li onClick={go('/feeds/hot')}>Feeds</li>
+          <li onClick={go('/posts')}>Posts</li>
+          <li onClick={go('/posts/detail')}>Post detail</li>
+          <li onClick={go('/about')}>About</li>
+        </ol>
       </div>
     )
   }
