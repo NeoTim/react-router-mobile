@@ -30,18 +30,25 @@ class Pages extends React.Component<Prop> {
 
   public go = (path: string) => {
     const { pageStore } = this.props
-    const page = this.getPageByPath(path)
-    if (!page) throw new Error('no page match')
-    pageStore.add(page)
+    const { pages, mountedPages } = pageStore.state
+    const pageExisted = this.getPageByPath(mountedPages, path)
+
+    // 浏览器后退按钮操作
+    if (pageExisted) {
+      pageStore.back()
+    } else {
+      const page = this.getPageByPath(pages, path)
+      if (!page) throw new Error('no page match')
+      pageStore.add(page)
+    }
   }
 
   setCurrentName = path => {
     this.current = path
   }
 
-  getPageByPath = (path: string) => {
-    const { pageStore } = this.props
-    return pageStore.state.pages.find(page => {
+  getPageByPath = (pages, path: string) => {
+    return pages.find(page => {
       const route = new Route(page.path)
       return route.match(path)
     })
