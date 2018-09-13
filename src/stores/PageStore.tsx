@@ -1,4 +1,5 @@
 import { Model } from '../statmen'
+import { last, replaceState } from '../util'
 
 interface Page {
   path: string
@@ -18,20 +19,6 @@ function isSimple(page: JSX.Element): boolean {
   return !page.props.children
 }
 
-function getPageBlock(
-  children: JSX.Element[],
-  displayName: string,
-): JSX.Element {
-  const block = children.find(
-    (item: any) => item.type.displayName === displayName,
-  )
-
-  if (!block) {
-    throw new Error('no page block')
-  }
-  return block
-}
-
 class PageStore extends Model {
   state: State = {
     pages: [],
@@ -41,11 +28,6 @@ class PageStore extends Model {
 
   init(pages: JSX.Element[]) {
     const pageData = pages.map(page => {
-      return {
-        path: page.props.path,
-        component: page,
-        default: !!page.props.default,
-      }
       if (isSimple(page)) {
         return {
           path: page.props.path,
@@ -55,11 +37,7 @@ class PageStore extends Model {
       } else {
         const { children } = page.props
         console.log('pages children:', children)
-        const header = getPageBlock(children, 'Header')
-        const body = getPageBlock(children, 'Connect(Body)')
-        const footer = getPageBlock(children, 'Footer')
-
-        const subPages = body.props.children.map(item => ({
+        const subPages = children.map(item => ({
           path: item.props.path,
           component: item,
         }))
@@ -68,8 +46,6 @@ class PageStore extends Model {
           path: page.props.path,
           component: page,
           default: !!page.props.default,
-          header,
-          footer,
           subPages,
         }
       }
@@ -91,6 +67,9 @@ class PageStore extends Model {
   back() {
     this.setState({ mountedPages: this.state.mountedPages.slice(0, -1) })
     console.log('MOUNTED_PAGES:', this.state.mountedPages)
+    const { path } = last(this.state.mountedPages)
+    console.log('path:', path)
+    replaceState(path)
   }
 }
 

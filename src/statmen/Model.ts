@@ -12,6 +12,10 @@ export default class Model {
   subscribe(fn: Listener) {
     this.listeners.push(fn)
     console.log('this.listeners:', this.listeners)
+    return () => {
+      const index = this.listeners.indexOf(fn)
+      this.listeners.splice(index, 1)
+    }
   }
 
   unsubscribe(fn: Listener) {

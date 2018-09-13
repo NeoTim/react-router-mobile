@@ -2410,6 +2410,10 @@ rollup@^0.64.1:
     "@types/estree" "0.0.39"
     "@types/node" "*"
 
+route-parser@^0.0.5:
+  version "0.0.5"
+  resolved "http://registry.npm.taobao.org/route-parser/download/route-parser-0.0.5.tgz#7d1d09d335e49094031ea16991a4a79b01bbe1f4"
+
 rxjs@^6.1.0:
   version "6.2.2"
   resolved "http://registry.npm.alibaba-inc.com/rxjs/download/rxjs-6.2.2.tgz#eb75fa3c186ff5289907d06483a77884586e1cf9"

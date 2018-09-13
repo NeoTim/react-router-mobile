@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { navigate } from '../../dist/index'
-import Nav from './Nav'
 import { Back } from '../../dist'
 
 const list = [
@@ -16,12 +15,11 @@ class Posts extends React.Component {
   render() {
     return (
       <div className="posts">
-        <Nav />
         <Back />
         <h1>Posts</h1>
         <ul>
           {list.map((item, index) => (
-            <li key={index} onClick={() => navigate('/posts/detail')}>
+            <li key={index} onClick={() => navigate(`/posts/${index}`)}>
               {item}
             </li>
           ))}

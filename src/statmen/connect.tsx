@@ -26,6 +26,7 @@ export default function connect(stores?: any[]) {
       storeName: string
       unmounted: boolean = false
       instances: any[]
+      unsubscribe: any
 
       constructor(props, context) {
         super(props, context)
@@ -55,10 +56,14 @@ export default function connect(stores?: any[]) {
       componentDidMount() {
         if (stores) {
           Object.values(this.stores).forEach((store: any) => {
-            store.subscribe(this.listener)
+            this.unsubscribe = store.subscribe(this.listener)
           })
           this.listener()
         }
+      }
+
+      componentWillUnmount() {
+        this.unsubscribe()
       }
 
       render() {

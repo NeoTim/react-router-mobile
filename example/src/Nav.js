@@ -14,10 +14,10 @@ class Nav extends React.Component {
     return (
       <div className="cmp-nav">
         <ul>
-          <li onClick={go('/')}>Home</li>
-          <li onClick={go('/hot')}>Hot</li>
-          <li onClick={go('/latest')}>New</li>
-          <li onClick={go('/like')}>Like</li>
+          <li onClick={go('/feeds')}>Home</li>
+          <li onClick={go('/feeds/hot')}>Hot</li>
+          <li onClick={go('/feeds/latest')}>New</li>
+          <li onClick={go('/feeds/like')}>Like</li>
         </ul>
       </div>
     )

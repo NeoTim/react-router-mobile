@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import * as Route from 'route-parser'
 
 import ROUTERS from '../routers'
 import { getPath } from '../util'
@@ -30,6 +31,7 @@ class Pages extends React.Component<Prop> {
   public go = (path: string) => {
     const { pageStore } = this.props
     const page = this.getPageByPath(path)
+    if (!page) throw new Error('no page match')
     pageStore.add(page)
   }
 
@@ -39,7 +41,10 @@ class Pages extends React.Component<Prop> {
 
   getPageByPath = (path: string) => {
     const { pageStore } = this.props
-    return pageStore.state.pages.find(page => page.path === path)
+    return pageStore.state.pages.find(page => {
+      const route = new Route(page.path)
+      return route.match(path)
+    })
   }
 
   getDefaultPage = () => {
