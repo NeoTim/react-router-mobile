@@ -1,27 +1,33 @@
-const path = require('path');
-const express = require('express');
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
+const path = require('path')
+const fs = require('fs')
+const express = require('express')
+const webpack = require('webpack')
+const webpackDevMiddleware = require('webpack-dev-middleware')
+const webpackHotMiddleware = require('webpack-hot-middleware')
 
-const { DEV_PORT } = require('./helper');
-const webpackConfig = require('./webpack.config.dev');
-const staticPath = path.join(__dirname, '..', 'dist');
+const { DEV_PORT } = require('./helper')
+const webpackConfig = require('./webpack.config.dev')
+const staticPath = path.join(__dirname, '..', 'dist')
 
-const app = express();
-const compiler = webpack(webpackConfig);
+const app = express()
+const compiler = webpack(webpackConfig)
 
 const wdm = webpackDevMiddleware(compiler, {
   hot: true,
   headers: { 'Access-Control-Allow-Origin': '*' },
-});
+})
 
-const whm = webpackHotMiddleware(compiler);
+const whm = webpackHotMiddleware(compiler)
 
-app.use(wdm);
-app.use(whm);
-app.use('/', express.static(staticPath));
+app.use(wdm)
+app.use(whm)
+// app.use(express.static(staticPath))
+
+app.get('*', function(req, res) {
+  const str = fs.readFileSync(path.join(staticPath, 'index.html'), 'utf8');
+  res.send(str)
+})
 
 app.listen(DEV_PORT, () => {
-  console.log(`Listening on port ${DEV_PORT}!`);
-});
+  console.log(`Listening on port ${DEV_PORT}!`)
+})

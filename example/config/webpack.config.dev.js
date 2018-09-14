@@ -56,7 +56,7 @@ module.exports = {
       template: resolve(__dirname, '../src/index.html'),
       inject: 'body',
       chunks: ['index'],
-      alwaysWriteToDisk: false,
+      alwaysWriteToDisk: true,
     }),
     new AddAssetHtmlPlugin({
       filepath: resolve(__dirname, '../dll/*.dll.js'),

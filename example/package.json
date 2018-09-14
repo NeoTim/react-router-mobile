@@ -42,7 +42,6 @@
     "react-animated-css": "^1.0.4",
     "react-dom": "^16.4.2",
     "react-transition-group": "^2.4.0",
-    "unstated": "^2.1.1",
     "url-parse": "^1.4.3"
   }
 }

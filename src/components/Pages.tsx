@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import * as Route from 'route-parser'
+import Path from 'path-parser'
 
 import ROUTERS from '../routers'
 import { getPath } from '../util'
@@ -49,14 +49,9 @@ class Pages extends React.Component<Prop> {
 
   getPageByPath = (pages, path: string) => {
     return pages.find(page => {
-      const route = new Route(page.path)
-      return route.match(path)
+      const route = new Path(page.path)
+      return route.test(path)
     })
-  }
-
-  getDefaultPage = () => {
-    const { pageStore } = this.props
-    return pageStore.state.pages.find(page => page.default)
   }
 
   componentWillMount() {
@@ -69,7 +64,7 @@ class Pages extends React.Component<Prop> {
     const { pageStore } = this.props
     pageStore.init(pages)
 
-    const defaultPage = this.getDefaultPage()
+    const defaultPage = this.getPageByPath(pageStore.state.pages, getPath())
     pageStore.add(defaultPage)
   }
 

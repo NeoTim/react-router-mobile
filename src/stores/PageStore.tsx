@@ -67,6 +67,7 @@ class PageStore extends Model {
   back() {
     this.setState({ mountedPages: this.state.mountedPages.slice(0, -1) })
     console.log('MOUNTED_PAGES:', this.state.mountedPages)
+    if (!this.state.mountedPages.length) return
     const { path } = last(this.state.mountedPages)
     console.log('path:', path)
     replaceState(path)
