@@ -1,5 +1,5 @@
 import { pushState, replaceState, getPath } from './util'
-import ROUTERS from './routers'
+import PageStore from './stores/PageStore'
 
 export default function navigate(to: string, replace: boolean = false) {
   if (to === getPath()) return
@@ -10,5 +10,5 @@ export default function navigate(to: string, replace: boolean = false) {
     pushState(to)
   }
 
-  ROUTERS[0].go(to)
+  PageStore.go(to)
 }

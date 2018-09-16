@@ -2,7 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { hot } from 'react-hot-loader'
 
-import { Router, Page, Header, Body, Footer, navigate } from '../../dist'
+import { Router, Route } from '../../dist'
+
 import Home from './Home'
 import PostList from './PostList'
 import PostDetail from './PostDetail'
@@ -15,22 +16,59 @@ import Like from './Like'
 
 import './index.less'
 
+const routes = [
+  {
+    path: '/',
+    component: Home,
+    animation: 'fade',
+  },
+  {
+    path: '/posts',
+    component: PostList,
+    animation: 'slide-right',
+  },
+  {
+    path: '/posts/:id',
+    component: PostDetail,
+    animation: 'slide-right',
+  },
+  {
+    path: '/about',
+    component: About,
+    animation: 'slide-right',
+  },
+  {
+    path: '/login',
+    component: Login,
+    animation: 'slide-up',
+  },
+  {
+    path: '/feeds',
+    component: Feeds,
+    animation: 'slide-right',
+    routes: [
+      {
+        path: '/hot',
+        component: Hot,
+        animation: 'fade',
+      },
+      {
+        path: '/latest',
+        component: Latest,
+        animation: 'fade',
+      },
+      {
+        path: '/like',
+        component: Like,
+        animation: 'fade',
+      },
+    ],
+  },
+]
+
 class App extends React.Component {
   render() {
-    return (
-      <Router>
-        <Home path="/" animation="fade" default />
-        <Feeds path="/feeds" animation="slide-right">
-          <Hot path="hot" animation="fade" />
-          <Latest path="latest" animation="fade" />
-          <Like path="like" animation="fade" />
-        </Feeds>
-        <PostList path="/posts" animation="slide-right" />
-        <PostDetail path="/posts/:id" animation="slide-right" />
-        <About path="/about" animation="slide-right" />
-        <Login path="/login" animation="slide-up" />
-      </Router>
-    )
+    return <Router routes={routes} />
   }
 }
 

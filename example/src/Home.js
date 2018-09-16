@@ -14,7 +14,7 @@ class PageIndex extends React.Component {
         <h1>Routers</h1>
         <ul>
           <li onClick={go('/')}>Home</li>
-          <li onClick={go('/feeds')}>Feeds(TODO)</li>
+          <li onClick={go('/feeds/hot')}>Feeds(TODO)</li>
           <li onClick={go('/posts')}>Posts</li>
           <li onClick={go('/about')}>About</li>
         </ul>

@@ -1,15 +1,41 @@
 .pages,
-.page {
+.page ,
+.sub-page {
   width: 100%;
   height: 100%;
+}
+
+.pages {
+  overflow: hidden;
+}
+
+
+.sub-pages {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.page {
+  z-index: 0;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sub-page {
+  z-index: 1;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .page,
 .sub-page {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
+  bottom: 0;
 }
 
 .page-inner {
@@ -23,14 +49,16 @@
 }
 
 .body {
-  position: relative;
+  position: absolute;
   height: 80vh;
-  // overflow: auto;
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  overflow: hidden;
 }
 
 .footer {
+  position: absolute;
   height: 10vh;
+  bottom: 0;
+  width: 100%;
   background: #81ecec;
 }
