@@ -5,6 +5,7 @@ import { getPath } from '../util'
 import { connect } from '../statmen'
 import PageStore from '../stores/PageStore'
 import navigate from '../navigate'
+import { CLASS_PREFIX } from '../constant'
 
 interface Prop {
   [propName: string]: any
@@ -45,10 +46,18 @@ export default connect([PageStore])(Router)
 function createPage(pages) {
   return pages.map((page, index) => {
     const Page = page.component
+
+    if (!page.mounted) return null
+    const className = `${CLASS_PREFIX} ${page.selector}`
+    const pageProps = {
+      className,
+      style: { zIndex: 1 },
+    }
+
     if (!page.children || !page.children.length) {
       return (
         <CSSTransition key={index} timeout={400} classNames={page.animation}>
-          <div className="page" style={{ zIndex: 1 }}>
+          <div {...pageProps}>
             <Page />
           </div>
         </CSSTransition>
@@ -57,7 +66,7 @@ function createPage(pages) {
 
     return (
       <CSSTransition key={index} timeout={400} classNames={page.animation}>
-        <div className="page" style={{ zIndex: 1 }}>
+        <div {...pageProps}>
           <Page>{createPage(page.children)}</Page>
         </div>
       </CSSTransition>

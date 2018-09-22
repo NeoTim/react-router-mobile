@@ -1,8 +1,6 @@
 import * as React from 'react'
 
 import { connect } from '../statmen'
-import CounterStore from '../stores/CounterStore'
-import TodoStore from '../stores/TodoStore'
 import PageStore from '../stores/PageStore'
 
 interface Props {
@@ -24,6 +22,6 @@ class Back extends React.Component<Props & ConnectProps> {
   }
 }
 
-const ConnectedBack = connect([CounterStore, TodoStore, PageStore])(Back)
+const ConnectedBack = connect([PageStore])(Back)
 
 export default ConnectedBack
