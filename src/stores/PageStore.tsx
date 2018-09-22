@@ -6,7 +6,7 @@ import { last, replaceState } from '../util'
 interface Page {
   path: string
   fullPath?: string
-  routes?: any[]
+  children?: any[]
   animation?: string
   component: any
 }
@@ -14,7 +14,6 @@ interface Page {
 export interface State {
   pages: Page[]
   mountedPages: Page[]
-  currentPage: Page | null
 }
 
 function resetZIndex() {
@@ -26,131 +25,140 @@ function resetZIndex() {
 }
 
 // TODO
-function getPageByPath(pages, path: string) {
-  let page
+function pickExact(pages = [], path: string) {
+  let cmp
 
-  pages.forEach(item => {
-    const route = new Path(item.path)
-    if (route.test(path)) {
-      page = { ...item }
-      return
+  const find = (source, targetPath: string) => {
+    source.forEach(page => {
+      const parser = new Path(page.fullPath)
+      if (parser.test(targetPath)) {
+        cmp = page
+        return
+      }
+
+      if (page.children && page.children.length) {
+        find(page.children, targetPath)
+      }
+    })
+  }
+
+  find(pages, path)
+  return cmp
+}
+
+function pickParent(pages: Page[] = [], path: string) {
+  if (!pages.length) {
+    return null
+  }
+  const find = item => {
+    if (!item.children || !item.children.length) {
+      const parser = new Path(item.fullPath)
+      return parser.test(path)
+    } else {
+      return item.children.find(i => find(i))
+    }
+  }
+
+  const finded = pages.find(page => find(page))
+  if (!finded) {
+    return null
+  }
+  const [picked] = travalMounted([finded], path)
+  return picked
+}
+
+function travalMounted(configs: any = [], path = '') {
+  return configs.map(page => {
+    // TODO
+    const mounted = path.indexOf(page.fullPath) > -1
+    if (!page.children || !page.children.length) {
+      return { ...page, mounted }
     }
 
-    const reg = new RegExp(`^${item.path}`)
-    if (reg.test(path)) {
-      if (!item.routes.length) return
-      item.routes.forEach(subItem => {
-        console.log('path:', path)
-        console.log('subItem.fullPath:', subItem.fullPath)
-        if (path === subItem.fullPath) {
-          page = { ...subItem }
-        }
-      })
+    return {
+      ...page,
+      mounted,
+      children: travalMounted(page.children, page),
     }
   })
-  return page
+}
+
+function getSelector(fullPath: string) {
+  if (fullPath === '/') {
+    return 'page-base'
+  }
+  const prefix = 'page-'
+  const selector = fullPath
+    .split('/')
+    .filter(i => i)
+    .join('-')
+    .replace(':', 'colon-')
+  return prefix + selector
+}
+
+function traval(configs, path = '', isRoot = true) {
+  return configs.map(page => {
+    const fullPath = path + page.path
+    const selector = getSelector(fullPath)
+
+    if (!page.children || !page.children.length) {
+      return {
+        ...page,
+        fullPath,
+        selector,
+        className: selector,
+        isRoot,
+        children: [],
+      }
+    }
+
+    const parentPath = page.path
+    return {
+      ...page,
+      parentPath,
+      fullPath,
+      selector,
+      className: selector,
+      isRoot,
+      children: traval(page.children, fullPath, false),
+    }
+  })
 }
 
 class PageStore extends Model {
   state: State = {
     pages: [],
     mountedPages: [],
-    currentPage: null,
   }
 
   init(pages: Page[]) {
-    console.log('pages:', pages)
-    const initedPages = pages.map((page: Page) => {
-      if (!page.routes || !page.routes.length) {
-        return { ...page, fullPath: page.path, routes: [] }
-      }
-      console.log('page.routes:', page.routes)
-      const newRoutes = page.routes.map(route => {
-        const fullPath = page.path + route.path
-        const className = fullPath
-          .split('/')
-          .filter(i => i)
-          .join('-')
-        return {
-          ...route,
-          parent: page.path,
-          className: `sub-page-${className}`,
-          fullPath,
-        }
-      })
-
-      return {
-        ...page,
-        fullPath: page.path,
-        routes: newRoutes,
-      }
-    })
+    const initedPages = traval(pages, '', true)
+    console.log('initedPages:', initedPages)
     this.setState({ pages: initedPages })
     console.log('init pages:', this.state.pages)
   }
 
   go(path: string) {
     const { pages, mountedPages } = this.state
-    const pageExisted = getPageByPath(mountedPages, path)
+    const pageExisted = pickParent(mountedPages, path)
 
     // 浏览器后退按钮操作
-    if (pageExisted && !pageExisted.parent) {
+    // if (pageExisted && !pageExisted.parent) {
+    if (pageExisted) {
+      // debugger
       this.back()
     } else {
-      const page = getPageByPath(pages, path)
+      // debugger
+      const page = pickParent(pages, path)
       if (!page) throw new Error('no page match')
       this.add(page)
     }
   }
 
   add(page) {
-    const { pages, mountedPages } = this.state
-
-    // 如果不存在parent page
-    if (!page.parent) {
-      const current = page.routes ? { ...page, routes: [] } : page
-      this.setState({
-        mountedPages: [...mountedPages, current],
-      })
-      return
-    }
-
-    const parentPage: any = mountedPages.find(item => item.path === page.parent)
-
-    // TODO
-    // mounted 不存在parent page
-    if (!parentPage) {
-      const parent = getPageByPath(pages, page.parent)
-      parent.routes = [page]
-      console.log('parent:', [...mountedPages, parent])
-      this.setState({
-        mountedPages: [...mountedPages, parent],
-      })
-      console.log('mounted:', this.state.mountedPages)
-      return
-    }
-
-    // mounted 存在 parent page
-    const newMountedPages = mountedPages.map((item: any) => {
-      if (parentPage.path === item.path) {
-        const find = item.routes.find(r => r.fullPath === page.fullPath)
-        console.log('find:', find)
-        if (!find) {
-          resetZIndex()
-          item.routes.push(page)
-        } else {
-          resetZIndex()
-          const $current: any = document.querySelector(`.${page.className}`)
-          console.log('$current:', $current)
-          $current.style['z-index'] = 2
-        }
-      }
-      return item
-    })
-    console.log('newMountedPages:', newMountedPages)
-
+    const { mountedPages } = this.state
     this.setState({
-      mountedPages: newMountedPages,
+      mountedPages: [...mountedPages, page],
     })
   }
 

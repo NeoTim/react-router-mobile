@@ -8,6 +8,7 @@ const manifest = require('../dll/vendor-manifest.json')
 const { DEV_PORT, DEV_IP } = require('./helper')
 const BASE_DIR = join(__dirname, '..')
 const index = join(BASE_DIR, 'src', 'index.js')
+console.log('index:', index);
 
 module.exports = {
   entry: {

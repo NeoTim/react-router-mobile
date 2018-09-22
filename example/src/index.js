@@ -13,6 +13,7 @@ import Feeds from './Feeds'
 import Hot from './Hot'
 import Latest from './Latest'
 import Like from './Like'
+import Nest from './Nest'
 
 import './index.less'
 
@@ -46,7 +47,7 @@ const routes = [
     path: '/feeds',
     component: Feeds,
     animation: 'slide-right',
-    routes: [
+    children: [
       {
         path: '/hot',
         component: Hot,
@@ -61,6 +62,13 @@ const routes = [
         path: '/like',
         component: Like,
         animation: 'fade',
+        children: [
+          {
+            path: '/nest',
+            component: Nest,
+            animation: 'fade',
+          },
+        ],
       },
     ],
   },
