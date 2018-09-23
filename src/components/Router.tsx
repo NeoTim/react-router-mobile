@@ -50,11 +50,15 @@ function createPage(pages) {
       className,
       style: { zIndex: 2 },
     }
+    console.log('page:------------')
+    console.log('page:', page)
 
     if (!page.children || !page.children.length) {
       return (
         <CSSTransition key={index} timeout={400} classNames={page.animation}>
-          <div {...pageProps}>{page.component}</div>
+          <div {...pageProps}>
+            {React.cloneElement(page.component, { hx: 'xxxk' })}
+          </div>
         </CSSTransition>
       )
     }

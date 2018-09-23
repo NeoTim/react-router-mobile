@@ -7,6 +7,7 @@ export {
   pushState,
   replaceState,
   last,
+  matchPath,
   getPath,
   setZIndex,
   resetZIndex,
@@ -24,6 +25,11 @@ function replaceState(url: string): void {
 
 function last(arr: any[]) {
   return arr[arr.length - 1]
+}
+
+function matchPath(pagePath: string, clientPath: string): object | null {
+  const parser = new Path(pagePath)
+  return parser.test(clientPath)
 }
 
 function getPath(): string {
@@ -65,7 +71,7 @@ function getSelectors(currentPage: Page, path: string) {
   return selectors
 }
 
-function setZIndex(currentPage: Page, path: string) {
+function setZIndex(currentPage, path: string) {
   const selectors = getSelectors(currentPage, path)
   selectors.forEach(item => {
     const selector = '.' + item
@@ -91,8 +97,7 @@ function pickExact(pages: Page[] = [], path: string) {
 
   const find = (source, targetPath: string) => {
     source.forEach(page => {
-      const parser = new Path(page.fullPath)
-      if (parser.test(targetPath)) {
+      if (matchPath(page.fullPath, targetPath)) {
         cmp = page
         return
       }
@@ -113,8 +118,7 @@ function pickParent(pages: Page[] = [], path: string) {
   }
   const find = page => {
     if (!page.children || !page.children.length) {
-      const parser = new Path(page.fullPath)
-      return parser.test(path)
+      return matchPath(page.fullPath, path)
     } else {
       return page.children.find(i => find(i))
     }
