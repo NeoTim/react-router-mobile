@@ -8,6 +8,7 @@ export {
   replaceState,
   last,
   getPath,
+  setZIndex,
   resetZIndex,
   getSelector,
   pickExact,
@@ -30,15 +31,6 @@ function getPath(): string {
   return pathname
 }
 
-function resetZIndex() {
-  const selector = `.${CLASS_PREFIX}`
-  const $subPages = document.querySelectorAll(selector)
-  const $nodeArr = [].slice.call($subPages)
-  $nodeArr.forEach(node => {
-    node.style['z-index'] = 1
-  })
-}
-
 function getSelector(fullPath: string) {
   if (fullPath === '/') {
     return `${CLASS_PREFIX}-base`
@@ -50,6 +42,47 @@ function getSelector(fullPath: string) {
     .join('-')
     .replace(':', 'colon-')
   return prefix + selector
+}
+
+function getSelectors(currentPage: Page, path: string) {
+  const selectors: string[] = []
+  function travalPage(pages: Page[]) {
+    pages.forEach((page: Page) => {
+      if (!page.children || !page.children.length) {
+        if (path.indexOf(page.fullPath) > -1) {
+          selectors.push(page.selector)
+        }
+        return
+      }
+
+      if (path.indexOf(page.fullPath) > -1) {
+        selectors.push(page.selector)
+      }
+      travalPage(page.children)
+    })
+  }
+  travalPage([currentPage])
+  return selectors
+}
+
+function setZIndex(currentPage: Page, path: string) {
+  const selectors = getSelectors(currentPage, path)
+  selectors.forEach(item => {
+    const selector = '.' + item
+    const $page: HTMLElement | null = document.querySelector(selector)
+    if ($page) {
+      $page.style['z-index'] = 2
+    }
+  })
+}
+
+function resetZIndex() {
+  const selector = `.${CLASS_PREFIX}`
+  const $subPages = document.querySelectorAll(selector)
+  const $nodeArr = [].slice.call($subPages)
+  $nodeArr.forEach(node => {
+    node.style['z-index'] = 1
+  })
 }
 
 // TODO

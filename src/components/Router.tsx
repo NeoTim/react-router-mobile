@@ -17,10 +17,9 @@ class Router extends React.Component<Prop> {
   }
 
   componentDidMount = () => {
-    const { routes } = this.props
     const { pageStore } = this.props
     addEventListener('popstate', this.handlePop)
-    pageStore.init(routes)
+    pageStore.init(this.props.children)
     pageStore.go(getPath())
   }
 
@@ -32,7 +31,7 @@ class Router extends React.Component<Prop> {
     const { pageStore } = this.props
     const { mountedPages } = pageStore.state
     console.log('mountedPages:', mountedPages)
-
+    if (!mountedPages.length) return null
     return (
       <TransitionGroup class="pages">
         {createPage(mountedPages)}
@@ -45,21 +44,17 @@ export default connect([PageStore])(Router)
 
 function createPage(pages) {
   return pages.map((page, index) => {
-    const Page = page.component
-
     if (!page.mounted) return null
     const className = `${CLASS_PREFIX} ${page.selector}`
     const pageProps = {
       className,
-      style: { zIndex: 1 },
+      style: { zIndex: 2 },
     }
 
     if (!page.children || !page.children.length) {
       return (
         <CSSTransition key={index} timeout={400} classNames={page.animation}>
-          <div {...pageProps}>
-            <Page />
-          </div>
+          <div {...pageProps}>{page.component}</div>
         </CSSTransition>
       )
     }
@@ -67,7 +62,7 @@ function createPage(pages) {
     return (
       <CSSTransition key={index} timeout={400} classNames={page.animation}>
         <div {...pageProps}>
-          <Page>{createPage(page.children)}</Page>
+          {React.cloneElement(page.component, {}, createPage(page.children))}
         </div>
       </CSSTransition>
     )

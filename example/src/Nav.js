@@ -14,8 +14,8 @@ class Nav extends React.Component {
       <div className="cmp-nav">
         <ul>
           <li onClick={go('/feeds/hot')}>Hot</li>
-          <li onClick={go('/feeds/latest')}>New</li>
           <li onClick={go('/feeds/like/nest')}>Like</li>
+          <li onClick={go('/feeds/latest')}>Latest</li>
         </ul>
       </div>
     )

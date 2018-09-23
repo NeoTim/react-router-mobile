@@ -3,6 +3,7 @@ import {
   last,
   replaceState,
   getSelector,
+  setZIndex,
   resetZIndex,
   pickParent,
   pickExact,
@@ -13,33 +14,36 @@ import Page from '../interfaces/Page'
 export interface State {
   pages: Page[]
   mountedPages: Page[]
+  currentPage: Page | null
 }
 
-function traval(configs, path = '', isRoot = true) {
-  return configs.map(page => {
-    const fullPath = path + page.path
+function travalJSX(pages, path = '', isRoot = true) {
+  return pages.map(page => {
+    const { path: pagePath, animation = '', children } = page.props
+    const fullPath = path + pagePath
     const selector = getSelector(fullPath)
 
-    if (!page.children || !page.children.length) {
+    if (!children) {
       return {
-        ...page,
+        component: page,
+        path: pagePath,
         fullPath,
         selector,
-        className: selector,
+        animation,
         isRoot,
-        children: [],
       }
     }
 
-    const parentPath = page.path
+    const childrenArray = children.length ? children : [children]
+
     return {
-      ...page,
-      parentPath,
+      component: page,
+      path: pagePath,
       fullPath,
       selector,
-      className: selector,
+      animation,
       isRoot,
-      children: traval(page.children, fullPath, false),
+      children: travalJSX(childrenArray, fullPath, false),
     }
   })
 }
@@ -75,11 +79,11 @@ class PageStore extends Model {
   state: State = {
     pages: [],
     mountedPages: [],
+    currentPage: null,
   }
 
   init(pages: Page[]) {
-    const initedPages = traval(pages, '', true)
-    console.log('initedPages:', initedPages)
+    const initedPages = travalJSX(pages, '', true)
     this.setState({ pages: initedPages })
     console.log('init pages:', this.state.pages)
   }
@@ -108,13 +112,9 @@ class PageStore extends Model {
       this.activeNest(path)
     }
 
+    const { currentPage } = this.state
     resetZIndex()
-
-    const selector = '.' + getSelector(path)
-    const $page: HTMLElement | null = document.querySelector(selector)
-    if ($page) {
-      $page.style['z-index'] = 2
-    }
+    setZIndex(currentPage, path)
   }
 
   activeNest(path: string) {
@@ -126,19 +126,22 @@ class PageStore extends Model {
 
   add(page) {
     const { mountedPages } = this.state
+
+    this.setState({
+      currentPage: page,
+    })
+
     this.setState({
       mountedPages: [...mountedPages, { ...page, mounted: true }],
     })
-
-    window.PAGES = this.state.mountedPages
   }
 
   back() {
     this.setState({ mountedPages: this.state.mountedPages.slice(0, -1) })
     console.log('MOUNTED_PAGES:', this.state.mountedPages)
     if (!this.state.mountedPages.length) return
-    const { path } = last(this.state.mountedPages)
-    replaceState(path)
+    const currentPage = last(this.state.mountedPages)
+    replaceState(currentPage.path)
   }
 }
 

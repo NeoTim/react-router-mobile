@@ -17,66 +17,24 @@ import Nest from './Nest'
 
 import './index.less'
 
-const routes = [
-  {
-    path: '/',
-    component: Home,
-    animation: 'fade',
-  },
-  {
-    path: '/posts',
-    component: PostList,
-    animation: 'slide-right',
-  },
-  {
-    path: '/posts/:id',
-    component: PostDetail,
-    animation: 'slide-right',
-  },
-  {
-    path: '/about',
-    component: About,
-    animation: 'slide-right',
-  },
-  {
-    path: '/login',
-    component: Login,
-    animation: 'slide-up',
-  },
-  {
-    path: '/feeds',
-    component: Feeds,
-    animation: 'slide-right',
-    children: [
-      {
-        path: '/hot',
-        component: Hot,
-        animation: 'fade',
-      },
-      {
-        path: '/latest',
-        component: Latest,
-        animation: 'fade',
-      },
-      {
-        path: '/like',
-        component: Like,
-        animation: 'fade',
-        children: [
-          {
-            path: '/nest',
-            component: Nest,
-            animation: 'fade',
-          },
-        ],
-      },
-    ],
-  },
-]
-
 class App extends React.Component {
   render() {
-    return <Router routes={routes} />
+    return (
+      <Router>
+        <Home path="/" animation="fade" />
+        <PostList path="/posts" animation="slide-right" />
+        <PostDetail path="/posts/:id" animation="slide-right" />
+        <About path="/about" animation="slide-right" />
+        <Login path="/login" animation="slide-up" />
+        <Feeds path="/feeds" animation="slide-right">
+          <Hot path="/hot" />
+          <Like path="/like">
+            <Nest path="/nest" />
+          </Like>
+          <Latest path="/latest" />
+        </Feeds>
+      </Router>
+    )
   }
 }
 
