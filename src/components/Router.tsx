@@ -2,7 +2,7 @@ import * as React from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 import { getPath } from '../util'
-import { connect } from '../statmen'
+import { inject } from 'stamen'
 import PageStore from '../stores/PageStore'
 import navigate from '../navigate'
 import { CLASS_PREFIX } from '../constant'
@@ -40,7 +40,7 @@ class Router extends React.Component<Prop> {
   }
 }
 
-export default connect([PageStore])(Router)
+export default inject(PageStore)(Router)
 
 function createPage(pages) {
   return pages.map((page, index) => {
@@ -50,8 +50,6 @@ function createPage(pages) {
       className,
       style: { zIndex: 2 },
     }
-    console.log('page:------------')
-    console.log('page:', page)
 
     if (!page.children || !page.children.length) {
       return (

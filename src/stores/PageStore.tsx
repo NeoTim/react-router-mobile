@@ -1,4 +1,4 @@
-import { Model } from '../statmen'
+import { Model } from 'stamen'
 import {
   last,
   replaceState,
@@ -75,7 +75,7 @@ function travalNest(pages, path = '') {
   })
 }
 
-class PageStore extends Model {
+export class PageStore extends Model {
   state: State = {
     pages: [],
     mountedPages: [],
