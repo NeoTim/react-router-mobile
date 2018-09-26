@@ -1,31 +1,27 @@
-import commonjs from 'rollup-plugin-commonjs'
-import external from 'rollup-plugin-peer-deps-external'
-import resolve from 'rollup-plugin-node-resolve'
 import typescript from 'rollup-plugin-typescript2'
 
 import pkg from './package.json'
 
 export default {
   input: 'src/index.tsx',
-  external: [],
-  plugins: [
-    external(),
-    resolve(),
-    typescript({
-      rollupCommonJSResolveHack: true,
-    }),
-    commonjs(),
-  ],
   output: [
     {
       file: pkg.main,
       format: 'cjs',
+      exports: 'named',
       sourcemap: true,
     },
     {
       file: pkg.module,
       format: 'es',
+      exports: 'named',
       sourcemap: true,
     },
+  ],
+  external: ['react', 'react-dom', 'path-parser', 'react-transition-group', 'mistate'],
+  plugins: [
+    typescript({
+      rollupCommonJSResolveHack: true,
+    }),
   ],
 }

@@ -1,6 +1,5 @@
 import React from 'react'
-
-import { Back } from '../../dist'
+import { Back } from 'react-router-mobile'
 
 class PostsDetail extends React.Component {
   render() {

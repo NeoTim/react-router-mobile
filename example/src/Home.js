@@ -1,22 +1,25 @@
 import React from 'react'
 
-import { navigate } from '../../dist/index'
+import { Link } from 'react-router-mobile'
 
 class PageIndex extends React.Component {
-
-  go(path) {
-    return () => navigate(path)
-  }
   render() {
-    const { go } = this
     return (
       <div className="home">
         <h1>Routers</h1>
         <ul>
-          <li onClick={go('/')}>Home</li>
-          <li onClick={go('/feeds/hot')}>Feeds(TODO)</li>
-          <li onClick={go('/posts')}>Posts</li>
-          <li onClick={go('/about')}>About</li>
+          <li>
+            <Link to={'/'}>Home</Link>
+          </li>
+          <li>
+            <Link to={'/feeds/hot'}>Feeds(TODO)</Link>
+          </li>
+          <li>
+            <Link to={'/posts'}>Posts</Link>
+          </li>
+          <li>
+            <Link to={'/about'}>About</Link>
+          </li>
         </ul>
       </div>
     )

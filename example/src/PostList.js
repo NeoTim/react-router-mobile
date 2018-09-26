@@ -1,7 +1,5 @@
 import React from 'react'
-
-import { navigate } from '../../dist/index'
-import { Back } from '../../dist'
+import { Back, navigate } from 'react-router-mobile'
 
 const list = [
   'Let s say you havea',
@@ -15,7 +13,7 @@ class Posts extends React.Component {
   render() {
     return (
       <div className="posts">
-        <Back />
+        <Back to="back" />
         <h1>Posts</h1>
         <ul>
           {list.map((item, index) => (
@@ -25,7 +23,7 @@ class Posts extends React.Component {
           ))}
         </ul>
 
-        <buttun onClick={() => navigate('/login')}>login</buttun>
+        <button onClick={() => navigate('/login')}>login</button>
       </div>
     )
   }

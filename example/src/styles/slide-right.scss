@@ -27,9 +27,11 @@
 
 .slide-right-enter-active {
   animation-name: slideInRight;
-  .animate;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
 }
 .slide-right-exit-active {
   animation-name: slideOutRight;
-  .animate;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
 }

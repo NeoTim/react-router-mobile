@@ -28,9 +28,11 @@
 
 .slide-up-enter-active {
   animation-name: slideInUp;
-  .animate;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
 }
 .slide-up-exit-active {
   animation-name: slideOutDown;
-  .animate;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
 }

@@ -9,10 +9,8 @@
   "defaultSeverity": "warning",
   "linterOptions": {
     "exclude": [
-      "config/**/*.js",
       "node_modules/**/*.ts",
-      "node_modules/**/*.js",
-      "lib/**/*.ts",
+      "examples/**/*.ts",
       "dist/**/*.ts"
     ]
   },

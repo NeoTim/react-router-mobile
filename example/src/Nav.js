@@ -1,21 +1,16 @@
 import React from 'react'
-import { navigate } from '../../dist/index'
+import { Link } from 'react-router-mobile'
 
-import './nav.less'
+import './nav.scss'
 
 class Nav extends React.Component {
-  go(path) {
-    return () => navigate(path)
-  }
-
   render() {
-    const { go } = this
     return (
       <div className="cmp-nav">
         <ul>
-          <li onClick={go('/feeds/hot')}>Hot</li>
-          <li onClick={go('/feeds/like/nest')}>Like</li>
-          <li onClick={go('/feeds/latest')}>Latest</li>
+          <Link to={'/feeds/hot'}>Hot</Link>
+          <Link to={'/feeds/like/nest'}>Like</Link>
+          <Link to={'/feeds/latest'}>Latest</Link>
         </ul>
       </div>
     )

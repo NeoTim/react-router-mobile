@@ -1,8 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { hot } from 'react-hot-loader'
 
-import { Router, Route } from '../../dist'
+import { Router } from 'react-router-mobile'
 
 import Home from './Home'
 import PostList from './PostList'
@@ -15,7 +14,7 @@ import Latest from './Latest'
 import Like from './Like'
 import Nest from './Nest'
 
-import './index.less'
+import './index.scss'
 
 class App extends React.Component {
   render() {
@@ -39,5 +38,3 @@ class App extends React.Component {
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
-
-hot(module)(App)

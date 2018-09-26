@@ -1,7 +1,6 @@
-import { navigate } from '../../dist'
+import { navigate } from 'react-router-mobile'
 import React from 'react'
 import Nav from './Nav'
-// import { Page } from '../../dist/index'
 
 class Feeds extends React.Component {
   render() {
@@ -12,7 +11,7 @@ class Feeds extends React.Component {
         </div>
         <div className="body">{this.props.children}</div>
         <div className="footer">
-          <buttun onClick={() => navigate('/login')}>login</buttun>
+          <button onClick={() => navigate('/login')}>login</button>
         </div>
       </div>
     )
