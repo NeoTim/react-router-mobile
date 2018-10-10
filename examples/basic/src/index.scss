@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.home {
+  background: pink;
+  height: 100%;
+}
+
+
+.about {
+  background: powderblue;
+  height: 100%;
+}
+
+.contact {
+  background: bisque;
+  height: 100%;
+}

@@ -16,6 +16,9 @@ import Nest from './Nest'
 
 import './index.scss'
 
+import "react-router-mobile/dist/index.css";
+// import "react-router-mobile/src/styles/index.scss";
+
 class App extends React.Component {
   render() {
     return (
