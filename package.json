@@ -15,7 +15,7 @@
     "tsc": "tsc",
     "tsc:watch": "tsc -w",
     "sass": "node-sass src/styles/index.scss dist/index.css",
-    "sass:watch": "node-sass -watch src/styles/index.scss dist/index.css",
+    "sass:watch": "node-sass --watch src/styles/index.scss > dist/index.css",
     "format": "prettier --write \"src/**/*.{js,ts,tsx}\"",
     "format:check": "prettier --list-different \"src/**/*.{js,ts,tsx}\"",
     "lint": "tslint -c tslint.json \"src/**/*.{ts,tsx}\"",

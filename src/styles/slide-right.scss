@@ -1,0 +1,37 @@
+@keyframes slideInRight {
+  from {
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    transform: translate3d(0%, 0, 0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    visibility: hidden;
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+.animate {
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+
+.slide-right-enter-active {
+  animation-name: slideInRight;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+.slide-right-exit-active {
+  animation-name: slideOutRight;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}

@@ -1,1 +1,1 @@
-export const CLASS_PREFIX = 'page'
+export const CLASS_PREFIX = 'rrm-page'

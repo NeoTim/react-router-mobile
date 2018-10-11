@@ -1,4 +1,8 @@
-export default interface Page {
+export interface Window {
+  [propName: string]: any
+}
+
+export interface Page {
   path: string
   fullPath: string
   selector: string

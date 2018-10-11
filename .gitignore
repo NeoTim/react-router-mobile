@@ -8,6 +8,5 @@ node_modules/
 .rpt2_cache
 *.swp
 dist/
-examples/
 lib/
 dll

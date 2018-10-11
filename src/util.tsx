@@ -2,13 +2,14 @@ import * as React from 'react'
 import Path from 'path-parser'
 import { CSSTransition } from 'react-transition-group'
 
-import Page from './interfaces/Page'
+import { Page } from './typings'
 import { CLASS_PREFIX } from './constant'
 
 export {
   pushState,
   replaceState,
   last,
+  lastButOne,
   matchPath,
   partialMatchPath,
   getPath,
@@ -17,8 +18,8 @@ export {
   getSelector,
   convertToPages,
   setMounted,
-  pickExact,
-  pickParent,
+  findExact,
+  findWithParent,
   createPage,
 }
 
@@ -31,6 +32,13 @@ function replaceState(url: string): void {
 
 function last(arr: any[]) {
   return arr[arr.length - 1]
+}
+
+function lastButOne(arr: any[]) {
+  if (arr.length < 2) {
+    throw new Error('array length should > 2')
+  }
+  return arr[arr.length - 2]
 }
 
 function matchPath(pagePath: string, clientPath: string): object | null {
@@ -82,7 +90,7 @@ function getSelectors(currentPage: Page, path: string) {
   return selectors
 }
 
-function setZIndex(currentPage, path: string) {
+function setZIndex(currentPage: Page, path: string) {
   const selectors = getSelectors(currentPage, path)
   selectors.forEach(item => {
     const selector = '.' + item
@@ -96,14 +104,20 @@ function setZIndex(currentPage, path: string) {
 function resetZIndex() {
   const selector = `.${CLASS_PREFIX}`
   const $subPages = document.querySelectorAll(selector)
-  const $nodeArr = [].slice.call($subPages)
+  const $nodeArr: HTMLElement[] = [].slice.call($subPages)
   $nodeArr.forEach(node => {
     node.style['z-index'] = 1
   })
 }
 
-function convertToPages(pages, path = '', isRoot = true) {
-  return pages.map(page => {
+function convertToPages(
+  pages: React.ReactNodeArray,
+  path = '',
+  isRoot = true,
+): any {
+  console.log('pages:', pages)
+  if (!pages || !pages.length) return
+  return pages.map((page: React.ReactElement<any>) => {
     const { path: pagePath, animation = '', children } = page.props
     const fullPath = path + pagePath
     const selector = getSelector(fullPath)
@@ -133,7 +147,7 @@ function convertToPages(pages, path = '', isRoot = true) {
   })
 }
 
-function setMounted(pages, path = '') {
+function setMounted(pages: Page[], path = ''): Page[] {
   return pages.map(page => {
     const mounted = !!partialMatchPath(page.fullPath, path)
     if (!page.children || !page.children.length) {
@@ -159,52 +173,56 @@ function setMounted(pages, path = '') {
   })
 }
 
-function pickExact(pages: Page[] = [], path: string) {
-  let cmp
+function findExact(pages: Page[] = [], path: string): Page | null {
+  let cmp: Page | null = null
 
-  const find = (source, targetPath: string) => {
-    source.forEach(page => {
+  const finder = (sourcePages: Page[], targetPath: string) => {
+    sourcePages.forEach(page => {
       if (matchPath(page.fullPath, targetPath)) {
         cmp = page
         return
       }
 
       if (page.children && page.children.length) {
-        find(page.children, targetPath)
+        finder(page.children, targetPath)
       }
     })
   }
 
-  find(pages, path)
+  finder(pages, path)
   return cmp
 }
 
-function pickParent(pages: Page[] = [], path: string) {
-  if (!pages.length) {
-    return null
-  }
-  const find = page => {
+/**
+ * find the matched root page
+ * @param pages
+ * @param path
+ */
+function findWithParent(pages: Page[] = [], path: string): Page | null {
+  if (!pages.length) return null
+
+  const finder: any = (page: Page) => {
     if (!page.children || !page.children.length) {
       return matchPath(page.fullPath, path)
     } else {
-      return page.children.find(i => find(i))
+      return page.children.find(subPage => finder(subPage))
     }
   }
 
-  const finded = pages.find(page => find(page))
+  const finded = pages.find(page => finder(page))
   if (!finded) {
     return null
   }
+
   const [picked] = travalMounted([finded], path)
   return picked
 }
 
 function travalMounted(configs: any = [], path = '') {
-  return configs.map(page => {
+  return configs.map((page: any) => {
     const mounted = !!partialMatchPath(page.fullPath, path)
-    if (!page.children || !page.children.length) {
-      return { ...page, mounted }
-    }
+    const hasChilden = page.children && page.children.length
+    if (hasChilden) return { ...page, mounted }
 
     return {
       ...page,
@@ -214,7 +232,7 @@ function travalMounted(configs: any = [], path = '') {
   })
 }
 
-function createPage(pages) {
+function createPage(pages: Page[]) {
   return pages.map((page, index) => {
     if (!page.mounted) return null
     const className = `${CLASS_PREFIX} ${page.selector}`
@@ -227,7 +245,11 @@ function createPage(pages) {
 
     if (!page.children || !page.children.length) {
       return (
-        <CSSTransition key={index} timeout={400} classNames={page.animation}>
+        <CSSTransition
+          key={index}
+          timeout={400}
+          classNames={page.animation || ''}
+        >
           <div {...pageProps}>
             {React.cloneElement(page.component, { params })}
           </div>
@@ -236,7 +258,11 @@ function createPage(pages) {
     }
 
     return (
-      <CSSTransition key={index} timeout={400} classNames={page.animation}>
+      <CSSTransition
+        key={index}
+        timeout={400}
+        classNames={page.animation || ''}
+      >
         <div {...pageProps}>
           {React.cloneElement(
             page.component,

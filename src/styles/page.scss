@@ -1,0 +1,53 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.rrm-pages,
+.rrm-page,
+.rrm-sub-page {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.rrm-pages {
+  overflow: hidden;
+}
+
+.rrm-page {
+  z-index: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rrm-sub-page {
+  z-index: 1;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rrm-header {
+  background-color: #b8e994;
+}
+
+.rrm-body {
+  position: absolute;
+  width: 100%;
+  overflow: hidden;
+}
+
+.rrm-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #81ecec;
+}

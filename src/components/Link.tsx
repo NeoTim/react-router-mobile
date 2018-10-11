@@ -4,7 +4,7 @@ import navigate from '../navigate'
 
 interface Props {
   to: string
-  children?: React.ReactNode
+  [key: string]: any
 }
 
 function go(e: React.SyntheticEvent, to: string) {
@@ -12,8 +12,8 @@ function go(e: React.SyntheticEvent, to: string) {
   navigate(to)
 }
 
-const Link = (props: Props) => (
-  <a href={props.to} onClick={e => go(e, props.to)}>
+const Link: React.SFC<Props> = props => (
+  <a href={props.to} onClick={e => go(e, props.to)} {...props}>
     {props.children}
   </a>
 )

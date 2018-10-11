@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { actions } from '../pageStore'
+import { actions } from '../routerStore'
 
-const Back = props => (
+const Back: React.SFC = props => (
   <span onClick={() => actions.back()}>{props.children || 'Back'}</span>
 )
 

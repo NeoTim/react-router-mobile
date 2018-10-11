@@ -3,10 +3,11 @@ import { TransitionGroup } from 'react-transition-group'
 
 import { getPath, createPage } from '../util'
 import navigate from '../navigate'
-import { get, actions } from '../pageStore'
+import { get, actions } from '../routerStore'
 
 interface Prop {
-  children: React.ReactNode
+  // TODO: need handle React.ReactElement
+  children: React.ReactNodeArray
 }
 
 class Router extends React.Component<Prop> {
@@ -29,7 +30,7 @@ class Router extends React.Component<Prop> {
       const { mountedPages } = state
       if (!mountedPages.length) return null
       return (
-        <TransitionGroup className="pages">
+        <TransitionGroup className="rrm-pages">
           {createPage(mountedPages)}
         </TransitionGroup>
       )
