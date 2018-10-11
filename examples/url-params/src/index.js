@@ -8,23 +8,17 @@ import './index.scss'
 
 const Home = () => (
   <div className="home">
-    <h1>Home</h1>
-    <Link to="/about">About</Link>
     <br />
-    <Link to="/contact">Contact</Link>
+    <div>Url Params</div>
+    <Link to="/users/Jordan">Jordan</Link>
+    <br />
+    <Link to="/users/James">James</Link>
   </div>
 )
 
-const About = () => (
-  <div className="about">
-    <h1>About</h1>
-    <Back />
-  </div>
-)
-
-const Contact = () => (
-  <div className="contact">
-    <h1>Contact</h1>
+const User = ({ params }) => (
+  <div className="user">
+    <h1>Hey, I am {params.name}</h1>
     <Back />
   </div>
 )
@@ -32,8 +26,7 @@ const Contact = () => (
 const App = () => (
   <Router>
     <Home path="/" animation="fade" />
-    <About path="/about" animation="slide-right" />
-    <Contact path="/contact" animation="slide-right" />
+    <User path="/users/:name" animation="slide-right" />
   </Router>
 )
 
